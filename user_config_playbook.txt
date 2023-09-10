@@ -1,0 +1,44 @@
+- name: create users
+  hosts: hqsdev1.tekneed.com
+  tasks:
+    - name: create user jerry
+      user:
+        name: jerry
+        uid: 200
+        shell: /bin/bash
+        groups: finance,wheel
+        append: yes
+        generate_ssh_key: yes
+        ssh_key_file: .ssh/id_rsa
+
+    - name: create /etc/sudoers.d/jerry file
+      file:
+        path: /etc/sudoers.d/jerry
+        state: touch
+
+    - name: configure a pass-wordless authentication & execution for Jerry
+      lineinfile:
+        path: /etc/sudoers.d/jerry
+        line: "jerry ALL=(ALL) NOPASSWD: ALL"
+        state: present
+
+    - name: install the SSH public key on managed host for jerry
+      authorized_key:
+        user: jerry
+        state: present
+        key: "{{ lookup('file', '/home/lisa/.ssh/id_rsa.pub') }}"
+
+
+fork other reposiories
+protect ur repo
+collabprate with others
+track files 
+
+
+
+git init
+git add .
+git commit -m "first-commit"
+git push <git-hub-repo-link>
+
+git clone https://github.com/victor-odunuga/user_config.git
